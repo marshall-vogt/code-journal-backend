@@ -79,6 +79,7 @@ app.delete('/api/entries/:entryId', async (req, res, next) => {
       delete
         from "entries"
         where "entryId" = $1
+        returning *
     `;
     const params = [entryId];
     const result = await db.query(sql, params);
