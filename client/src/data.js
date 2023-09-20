@@ -24,17 +24,32 @@ export async function addEntry(entry) {
   }
 }
 
-export function updateEntry(entry) {
-  // const newEntries = data.entries.map((e) =>
-  //   e.entryId === entry.entryId ? entry : e
-  // );
-  // data.entries = newEntries;
-  // return entry;
+export async function updateEntry(entry) {
+  try {
+    const response = await fetch(`api/entries/${entry.entryId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(entry),
+    });
+    if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
 export function removeEntry(entryId) {
-  // const updatedArray = data.entries.filter(
-  //   (entry) => entry.entryId !== entryId
-  // );
-  // data.entries = updatedArray;
+  // try {
+  //   const response = await fetch(`api/entries/${entry.entryId}`, {
+  //     method: 'PUT',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(entry),
+  //   });
+  //   if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
+  // } catch (error) {
+  //   console.log(error.message);
+  // }
 }
