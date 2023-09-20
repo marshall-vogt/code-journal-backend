@@ -39,17 +39,13 @@ export async function updateEntry(entry) {
   }
 }
 
-export function removeEntry(entryId) {
-  // try {
-  //   const response = await fetch(`api/entries/${entry.entryId}`, {
-  //     method: 'PUT',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(entry),
-  //   });
-  //   if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
-  // } catch (error) {
-  //   console.log(error.message);
-  // }
+export async function removeEntry(entryId) {
+  try {
+    const response = await fetch(`api/entries/${entryId}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
+  } catch (error) {
+    console.log(error.message);
+  }
 }
