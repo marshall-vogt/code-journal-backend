@@ -1,42 +1,40 @@
-let data = {
-  entries: [],
-  nextEntryId: 1,
-};
-
-window.addEventListener('beforeunload', function () {
-  const dataJSON = JSON.stringify(data);
-  localStorage.setItem('code-journal-data', dataJSON);
-});
-
-const localData = localStorage.getItem('code-journal-data');
-if (localData) {
-  data = JSON.parse(localData);
+export async function readEntries() {
+  try {
+    const response = await fetch('/api/entries');
+    if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
+    const entryList = await response.json();
+    return entryList;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-export function readEntries() {
-  return data.entries;
-}
-
-export function addEntry(entry) {
-  const newEntry = {
-    ...entry,
-    entryId: data.nextEntryId++,
-  };
-  data.entries.unshift(newEntry);
-  return newEntry;
+export async function addEntry(entry) {
+  try {
+    const response = await fetch('/api/entries', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(entry),
+    });
+    if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
+  } catch (error) {
+    console.error(error.message);
+  }
 }
 
 export function updateEntry(entry) {
-  const newEntries = data.entries.map((e) =>
-    e.entryId === entry.entryId ? entry : e
-  );
-  data.entries = newEntries;
-  return entry;
+  // const newEntries = data.entries.map((e) =>
+  //   e.entryId === entry.entryId ? entry : e
+  // );
+  // data.entries = newEntries;
+  // return entry;
 }
 
 export function removeEntry(entryId) {
-  const updatedArray = data.entries.filter(
-    (entry) => entry.entryId !== entryId
-  );
-  data.entries = updatedArray;
+  // const updatedArray = data.entries.filter(
+  //   (entry) => entry.entryId !== entryId
+  // );
+  // data.entries = updatedArray;
 }
