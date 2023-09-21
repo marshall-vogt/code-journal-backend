@@ -11,22 +11,33 @@ export default function EntryForm({ entry, onSubmit }) {
   const [photoUrl, setPhotoUrl] = useState(entry?.photoUrl ?? '');
   const [notes, setNotes] = useState(entry?.notes ?? '');
   const [isDeleting, setIsDeleting] = useState(false);
+  const [error, setError] = useState();
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    const newEntry = { title, photoUrl, notes };
-    if (entry) {
-      updateEntry({ ...entry, ...newEntry });
-    } else {
-      addEntry(newEntry);
+  async function handleSubmit(event) {
+    try {
+      event.preventDefault();
+      const newEntry = { title, photoUrl, notes };
+      if (entry) {
+        await updateEntry({ ...entry, ...newEntry });
+      } else {
+        await addEntry(newEntry);
+      }
+      onSubmit();
+    } catch (error) {
+      setError(error);
     }
-    onSubmit();
   }
 
-  function handleDelete() {
-    removeEntry(entry.entryId);
-    onSubmit();
+  async function handleDelete() {
+    try {
+      await removeEntry(entry.entryId);
+      onSubmit();
+    } catch (error) {
+      setError(error);
+    }
   }
+
+  if (error) return <div>{error.message}</div>;
 
   return (
     <div className="container">
